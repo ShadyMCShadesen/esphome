@@ -160,6 +160,8 @@ class FingerprintGrowComponent : public PollingComponent, public uart::UARTDevic
   void led_control(bool state);
   void aura_led_control(uint8_t state, uint8_t speed, uint8_t color, uint8_t count);
 
+  GPIOPin *sensing_pin_{nullptr};
+
  protected:
   void scan_and_match_();
   uint8_t scan_image_(uint8_t buffer);
@@ -178,7 +180,6 @@ class FingerprintGrowComponent : public PollingComponent, public uart::UARTDevic
   uint16_t capacity_ = 64;
   uint32_t password_ = 0x0;
   uint32_t new_password_ = -1;
-  GPIOPin *sensing_pin_{nullptr};
   GPIOPin *sensor_power_pin_{nullptr};
   uint8_t enrollment_image_ = 0;
   uint16_t enrollment_slot_ = ENROLLMENT_SLOT_UNUSED;
