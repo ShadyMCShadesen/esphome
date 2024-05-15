@@ -9,7 +9,7 @@ DEPENDENCIES = ["fingerprint_grow"]
 CONFIG_SCHEMA = cv.Schema(
     {
         cv.GenerateID(CONF_FINGERPRINT_GROW_ID): cv.use_id(FingerprintGrowComponent),
-        cv.Optional("fingerprint_enrolling"): sensor.binary_sensor_schema(
+        cv.Optional("fingerprint_enrolling"): binary_sensor.binary_sensor_schema(
             icon=ICON_KEY_PLUS,
         ),
         cv.Optional("sensing_pin"): binary_sensor.binary_sensor_schema(
