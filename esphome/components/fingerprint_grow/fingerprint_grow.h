@@ -123,8 +123,8 @@ class FingerprintGrowComponent : public PollingComponent, public uart::UARTDevic
   void set_last_confidence_sensor(sensor::Sensor *last_confidence_sensor) {
     this->last_confidence_sensor_ = last_confidence_sensor;
   }
-  void set_enrolling_binary_sensor(binary_sensor::BinarySensor *enrolling_binary_sensor) {
-    this->enrolling_binary_sensor_ = enrolling_binary_sensor;
+  void set_fingerprint_enrolling_binary_sensor(binary_sensor::BinarySensor *fingerprint_enrolling_binary_sensor) {
+    this->fingerprint_enrolling_binary_sensor_ = fingerprint_enrolling_binary_sensor;
   }
   void set_sensing_pin_binary_sensor(binary_sensor::BinarySensor *sensing_pin_binary_sensor) {
     this->sensing_pin_binary_sensor_ = sensing_pin_binary_sensor;
@@ -202,7 +202,7 @@ class FingerprintGrowComponent : public PollingComponent, public uart::UARTDevic
   sensor::Sensor *security_level_sensor_{nullptr};
   sensor::Sensor *last_finger_id_sensor_{nullptr};
   sensor::Sensor *last_confidence_sensor_{nullptr};
-  binary_sensor::BinarySensor *enrolling_binary_sensor_{nullptr};
+  binary_sensor::BinarySensor *fingerprint_enrolling_binary_sensor_{nullptr};
   binary_sensor::BinarySensor *sensing_pin_binary_sensor_{nullptr};
   CallbackManager<void()> finger_scan_invalid_callback_;
   CallbackManager<void()> finger_scan_start_callback_;

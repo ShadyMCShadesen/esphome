@@ -103,8 +103,8 @@ void FingerprintGrowComponent::setup() {
 
 void FingerprintGrowComponent::enroll_fingerprint(uint16_t finger_id, uint8_t num_buffers) {
   ESP_LOGI(TAG, "Starting enrollment in slot %d", finger_id);
-  if (this->enrolling_binary_sensor_ != nullptr) {
-    this->enrolling_binary_sensor_->publish_state(true);
+  if (this->fingerprint_enrolling_binary_sensor_ != nullptr) {
+    this->fingerprint_enrolling_binary_sensor_->publish_state(true);
   }
   this->enrollment_slot_ = finger_id;
   this->enrollment_buffers_ = num_buffers;
@@ -122,8 +122,8 @@ void FingerprintGrowComponent::finish_enrollment(uint8_t result) {
   }
   this->enrollment_image_ = 0;
   this->enrollment_slot_ = ENROLLMENT_SLOT_UNUSED;
-  if (this->enrolling_binary_sensor_ != nullptr) {
-    this->enrolling_binary_sensor_->publish_state(false);
+  if (this->fingerprint_enrolling_binary_sensor_ != nullptr) {
+    this->fingerprint_enrolling_binary_sensor_->publish_state(false);
   }
   ESP_LOGI(TAG, "Finished enrollment");
 }
@@ -280,8 +280,8 @@ bool FingerprintGrowComponent::get_parameters_() {
     if (this->security_level_sensor_ != nullptr) {
       this->security_level_sensor_->publish_state(((uint16_t) this->data_[7] << 8) | this->data_[8]);
     }
-    if (this->enrolling_binary_sensor_ != nullptr) {
-      this->enrolling_binary_sensor_->publish_state(false);
+    if (this->fingerprint_enrolling_binary_sensor_ != nullptr) {
+      this->fingerprint_enrolling_binary_sensor_->publish_state(false);
     }
     if (this->sensing_pin_binary_sensor_ != nullptr) {
       this->sensing_pin_binary_sensor_->publish_state(false);
