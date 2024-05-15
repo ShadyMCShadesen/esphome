@@ -126,6 +126,9 @@ class FingerprintGrowComponent : public PollingComponent, public uart::UARTDevic
   void set_enrolling_binary_sensor(binary_sensor::BinarySensor *enrolling_binary_sensor) {
     this->enrolling_binary_sensor_ = enrolling_binary_sensor;
   }
+  void set_sensing_binary_sensor(binary_sensor::BinarySensor *sensing_binary_sensor) {
+    this->sensing_binary_sensor_ = sensing_binary_sensor;
+  }
   void add_on_finger_scan_start_callback(std::function<void()> callback) {
     this->finger_scan_start_callback_.add(std::move(callback));
   }
@@ -160,8 +163,6 @@ class FingerprintGrowComponent : public PollingComponent, public uart::UARTDevic
   void led_control(bool state);
   void aura_led_control(uint8_t state, uint8_t speed, uint8_t color, uint8_t count);
 
-  GPIOPin *sensing_pin_{nullptr};
-  bool has_sensing_pin_ = false;
 
  protected:
   void scan_and_match_();
@@ -182,12 +183,14 @@ class FingerprintGrowComponent : public PollingComponent, public uart::UARTDevic
   uint32_t password_ = 0x0;
   uint32_t new_password_ = -1;
   GPIOPin *sensor_power_pin_{nullptr};
+  GPIOPin *sensing_pin_{nullptr};
   uint8_t enrollment_image_ = 0;
   uint16_t enrollment_slot_ = ENROLLMENT_SLOT_UNUSED;
   uint8_t enrollment_buffers_ = 5;
   bool waiting_removal_ = false;
   bool has_power_pin_ = false;
   bool is_sensor_awake_ = false;
+  bool has_sensing_pin_ = false;
   uint32_t last_transfer_ms_ = 0;
   uint32_t last_aura_led_control_ = 0;
   uint16_t last_aura_led_duration_ = 0;
@@ -200,6 +203,7 @@ class FingerprintGrowComponent : public PollingComponent, public uart::UARTDevic
   sensor::Sensor *last_finger_id_sensor_{nullptr};
   sensor::Sensor *last_confidence_sensor_{nullptr};
   binary_sensor::BinarySensor *enrolling_binary_sensor_{nullptr};
+  binary_sensor::BinarySensor *sensing_binary_sensor_{nullptr};
   CallbackManager<void()> finger_scan_invalid_callback_;
   CallbackManager<void()> finger_scan_start_callback_;
   CallbackManager<void(uint16_t, uint16_t)> finger_scan_matched_callback_;

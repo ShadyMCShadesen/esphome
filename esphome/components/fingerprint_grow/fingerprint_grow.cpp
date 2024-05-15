@@ -27,6 +27,10 @@ void FingerprintGrowComponent::update() {
       return;
     } else if (!this->waiting_removal_) {
       this->finger_scan_start_callback_.call();
+      // setting sensor binary sensor to true
+      if (this->sensing_binary_sensor_ != nullptr) {
+        this->sensing_binary_sensor_->publish_state(true);
+      }
     }
   }
 
@@ -34,6 +38,10 @@ void FingerprintGrowComponent::update() {
     if ((!this->has_sensing_pin_) && (this->scan_image_(1) == NO_FINGER)) {
       ESP_LOGD(TAG, "Finger removed");
       this->waiting_removal_ = false;
+      // setting sensor binary sensor to false
+      if (this->sensing_binary_sensor_ != nullptr) {
+        this->sensing_binary_sensor_->publish_state(false);
+      }
     }
     return;
   }
@@ -274,6 +282,9 @@ bool FingerprintGrowComponent::get_parameters_() {
     }
     if (this->enrolling_binary_sensor_ != nullptr) {
       this->enrolling_binary_sensor_->publish_state(false);
+    }
+    if (this->sensing_binary_sensor_ != nullptr) {
+      this->sensing_binary_sensor_->publish_state(false);
     }
     this->get_fingerprint_count_();
     return true;
