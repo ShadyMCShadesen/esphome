@@ -23,12 +23,8 @@ async def to_code(config):
     hub = await cg.get_variable(config[CONF_FINGERPRINT_GROW_ID])
 
     for key in [
-        CONF_FINGERPRINT_COUNT,
-        CONF_STATUS,
-        CONF_CAPACITY,
-        CONF_SECURITY_LEVEL,
-        CONF_LAST_FINGER_ID,
-        CONF_LAST_CONFIDENCE,
+        "fingerprint_enrolling",
+        "sensing_pin",
     ]:
         if key not in config:
             continue
