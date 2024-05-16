@@ -14,23 +14,27 @@ void FingerprintGrowComponent::update() {
     this->finish_enrollment(this->save_fingerprint_());
     return;
   }
-
+  
   if (this->has_sensing_pin_) {
     // A finger touch results in a low level (digital_read() == false)
     if (this->sensing_pin_->digital_read()) {
       ESP_LOGV(TAG, "No touch sensing");
+      // setting sensor binary sensor to false
+      if (this->sensing_pin_binary_sensor_ != nullptr) {
+        this->sensing_pin_binary_sensor_->publish_state(false);
+      }
       this->waiting_removal_ = false;
-      if ((this->enrollment_image_ == 0) &&  // Not in enrolment process
+      if ((this->enrollment_image_ == 0) &&  // Not in enrollment process
           (millis() - this->last_transfer_ms_ > this->idle_period_to_sleep_ms_) && (this->is_sensor_awake_)) {
         this->sensor_sleep_();
       }
       return;
     } else if (!this->waiting_removal_) {
-      this->finger_scan_start_callback_.call();
       // setting sensor binary sensor to true
       if (this->sensing_pin_binary_sensor_ != nullptr) {
         this->sensing_pin_binary_sensor_->publish_state(true);
       }
+      this->finger_scan_start_callback_.call();
     }
   }
 
