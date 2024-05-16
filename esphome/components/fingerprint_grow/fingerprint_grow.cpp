@@ -84,6 +84,10 @@ void FingerprintGrowComponent::setup() {
       this->idle_period_to_sleep_ms_ = DEFAULT_IDLE_PERIOD_TO_SLEEP_MS;
     }
   }
+  
+  if (this->sensing_pin_binary_sensor_ != nullptr) {
+    this->sensing_pin_binary_sensor_->publish_state(false);
+  }
 
   // Place the sensor in a known (sleep/off) state and sync internal var state.
   this->sensor_sleep_();
@@ -283,9 +287,7 @@ bool FingerprintGrowComponent::get_parameters_() {
     if (this->fingerprint_enrolling_binary_sensor_ != nullptr) {
       this->fingerprint_enrolling_binary_sensor_->publish_state(false);
     }
-    if (this->sensing_pin_binary_sensor_ != nullptr) {
-      this->sensing_pin_binary_sensor_->publish_state(false);
-    }
+    
     this->get_fingerprint_count_();
     return true;
   }
