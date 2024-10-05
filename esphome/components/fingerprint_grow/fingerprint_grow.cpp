@@ -29,7 +29,10 @@ void FingerprintGrowComponent::update() {
       this->finger_scan_start_callback_.call();
       // setting sensor binary sensor to true
       if (this->sensing_pin_binary_sensor_ != nullptr) {
-        this->sensing_pin_binary_sensor_->publish_state(true);
+        if (!this->finger_detected_) {// if state is false, set to true
+          this->finger_detected_ = true;
+          this->sensing_pin_binary_sensor_->publish_state(true);
+        }
       }
     }
   }
@@ -40,7 +43,10 @@ void FingerprintGrowComponent::update() {
       this->waiting_removal_ = false;
       // setting sensor binary sensor to false
       if (this->sensing_pin_binary_sensor_ != nullptr) {
-        this->sensing_pin_binary_sensor_->publish_state(false);
+        if (this->finger_detected_) { // if state is true, set to false
+          this->finger_detected_ = false;
+          this->sensing_pin_binary_sensor_->publish_state(false);
+        }
       }
     }
     return;

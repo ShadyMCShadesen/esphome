@@ -191,6 +191,7 @@ class FingerprintGrowComponent : public PollingComponent, public uart::UARTDevic
   bool has_power_pin_ = false;
   bool is_sensor_awake_ = false;
   bool has_sensing_pin_ = false;
+  bool finger_detected_ = false;
   uint32_t last_transfer_ms_ = 0;
   uint32_t last_aura_led_control_ = 0;
   uint16_t last_aura_led_duration_ = 0;
