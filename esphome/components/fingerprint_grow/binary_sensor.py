@@ -14,7 +14,7 @@ CONFIG_SCHEMA = cv.Schema(
         ),
         cv.Optional("sensing_pin"): binary_sensor.binary_sensor_schema(
             icon="mdi:fingerprint",
-            internal=true,
+            internal='true',
         ),
     }
 )
