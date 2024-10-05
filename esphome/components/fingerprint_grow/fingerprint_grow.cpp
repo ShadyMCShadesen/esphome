@@ -14,19 +14,22 @@ void FingerprintGrowComponent::update() {
     this->finish_enrollment(this->save_fingerprint_());
     return;
   }
-
+  
   if (this->has_sensing_pin_) {
     // A finger touch results in a low level (digital_read() == false)
     if (this->sensing_pin_->digital_read()) {
       ESP_LOGV(TAG, "No touch sensing");
+      // setting sensor binary sensor to false
+      if (this->sensing_pin_binary_sensor_ != nullptr) {
+        this->sensing_pin_binary_sensor_->publish_state(false);
+      }
       this->waiting_removal_ = false;
-      if ((this->enrollment_image_ == 0) &&  // Not in enrolment process
+      if ((this->enrollment_image_ == 0) &&  // Not in enrollment process
           (millis() - this->last_transfer_ms_ > this->idle_period_to_sleep_ms_) && (this->is_sensor_awake_)) {
         this->sensor_sleep_();
       }
       return;
     } else if (!this->waiting_removal_) {
-      this->finger_scan_start_callback_.call();
       // setting sensor binary sensor to true
       if (this->sensing_pin_binary_sensor_ != nullptr) {
         if (!this->finger_detected_) {// if state is false, set to true
@@ -34,6 +37,7 @@ void FingerprintGrowComponent::update() {
           this->sensing_pin_binary_sensor_->publish_state(true);
         }
       }
+      this->finger_scan_start_callback_.call();
     }
   }
 
@@ -89,6 +93,10 @@ void FingerprintGrowComponent::setup() {
     if (this->idle_period_to_sleep_ms_ == UINT32_MAX) {
       this->idle_period_to_sleep_ms_ = DEFAULT_IDLE_PERIOD_TO_SLEEP_MS;
     }
+  }
+  
+  if (this->sensing_pin_binary_sensor_ != nullptr) {
+    this->sensing_pin_binary_sensor_->publish_state(false);
   }
 
   // Place the sensor in a known (sleep/off) state and sync internal var state.
@@ -289,9 +297,7 @@ bool FingerprintGrowComponent::get_parameters_() {
     if (this->fingerprint_enrolling_binary_sensor_ != nullptr) {
       this->fingerprint_enrolling_binary_sensor_->publish_state(false);
     }
-    if (this->sensing_pin_binary_sensor_ != nullptr) {
-      this->sensing_pin_binary_sensor_->publish_state(false);
-    }
+    
     this->get_fingerprint_count_();
     return true;
   }
