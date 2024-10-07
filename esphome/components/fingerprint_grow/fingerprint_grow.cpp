@@ -21,7 +21,10 @@ void FingerprintGrowComponent::update() {
       ESP_LOGV(TAG, "No touch sensing");
       // setting sensor binary sensor to false
       if (this->sensing_pin_binary_sensor_ != nullptr) {
-        this->sensing_pin_binary_sensor_->publish_state(false);
+        if (this->finger_detected_) {// if state is true, set to false
+          this->finger_detected_ = false;
+          this->sensing_pin_binary_sensor_->publish_state(false);
+        }
       }
       this->waiting_removal_ = false;
       if ((this->enrollment_image_ == 0) &&  // Not in enrollment process
